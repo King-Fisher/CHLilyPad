@@ -12,6 +12,7 @@ import com.laytonsmith.core.constructs.CArray;
 import com.laytonsmith.core.constructs.CBoolean;
 import com.laytonsmith.core.constructs.CByteArray;
 import com.laytonsmith.core.constructs.CInt;
+import com.laytonsmith.core.constructs.CNull;
 import com.laytonsmith.core.constructs.CString;
 import com.laytonsmith.core.constructs.CVoid;
 import com.laytonsmith.core.constructs.Construct;
@@ -417,7 +418,7 @@ public final class LilyPadFunctions {
 
 		@Override
 		public Integer[] numArgs() {
-			return new Integer[]{3};
+			return new Integer[]{2, 3};
 		}
 
 		@Override
@@ -427,22 +428,36 @@ public final class LilyPadFunctions {
 
 		@Override
 		public String docs() {
-			return "array {recipients, channel, message} Sends a message to the specified recipients. recipients can be a string or an array of string."
-				+ " message can be a string or a byte array. THis functions is a request.";
+			return "array {[recipients], channel, message} Sends a message to the specified recipients. recipients can be null, a string or an array of string,"
+				+ " if null or not specified, all the servers will receive the message. message can be a string or a byte array. This functions is a request.";
 		}
 
 		@Override
 		public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
-			ArrayList<String> recipients = new ArrayList<>();
-			if (args[0] instanceof CArray) {
-				for (Construct c : ((CArray) args[0]).asList()) {
-					recipients.add(c.val());
-				}
+			ArrayList<String> recipients;
+			String channel;
+			byte[] message;
+			if (args.length == 2) {
+				recipients = null;
+				channel = args[0].val();
+				message = args[1] instanceof CByteArray ? ((CByteArray) args[1]).asByteArrayCopy() : args[1].val().getBytes();
 			} else {
-				recipients.add(args[0].val());
+				if (args[0] instanceof CNull) {
+					recipients = null;
+				} else if (args[0] instanceof CArray) {
+					recipients = new ArrayList<>();
+					for (Construct c : ((CArray) args[0]).asList()) {
+						recipients.add(c.val());
+					}
+				} else {
+					recipients = new ArrayList<>();
+					recipients.add(args[0].val());
+				}
+				channel = args[1].val();
+				message = args[2] instanceof CByteArray ? ((CByteArray) args[2]).asByteArrayCopy() : args[2].val().getBytes();
 			}
 			try {
-				MessageResult result = CHLilyPadStatic.getConnect(t).request(new MessageRequest(recipients, args[1].val(), args[2] instanceof CByteArray ? ((CByteArray) args[2]).asByteArrayCopy() : args[2].val().getBytes())).awaitUninterruptibly();
+				MessageResult result = CHLilyPadStatic.getConnect(t).request(new MessageRequest(recipients, channel, message)).awaitUninterruptibly();
 				CArray r = new CArray(t);
 				r.set("status", result.getStatusCode().name());
 				return r;
