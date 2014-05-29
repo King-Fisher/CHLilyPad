@@ -105,7 +105,7 @@ public final class LilyPadEvents {
 		@Override
 		public String docs() {
 			return "{player: <macro> | server: <macro>}"
-				+ "Triggered when a player is redirected to a server."
+				+ "Triggered when a player is redirected to a server, if the current session have the role of a proxy."
 				+ "{player: the player | server: the name of the server}"
 				+ "{}"
 				+ "{}";
@@ -139,7 +139,7 @@ public final class LilyPadEvents {
 		@Override
 		public String docs() {
 			return "{server: <macro>}"
-				+ "Triggered when a server has been added to the network."
+				+ "Triggered when a server has been added to the network, if the current session have the role of a proxy."
 				+ "{server: the name of the server | address: the address of the server | security_key: the security key that the server used to connect to the network}"
 				+ "{}"
 				+ "{}";
@@ -172,7 +172,7 @@ public final class LilyPadEvents {
 		@Override
 		public String docs() {
 			return "{server: <macro>}"
-				+ "Triggered when a server has been removed to the network."
+				+ "Triggered when a server has been removed to the network, if the current session have the role of a proxy."
 				+ "{server: the name of the server}"
 				+ "{}"
 				+ "{}";
