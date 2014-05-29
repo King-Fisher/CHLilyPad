@@ -11,15 +11,15 @@ import lilypad.client.connect.api.event.ServerAddEvent;
  * @author KingFisher
  */
 @abstraction(type = Type.BUKKIT)
-public class CommonLilyPadServerAddEvent implements MCLilyPadServerAddEvent {
+public class CommonMCLilyPadServerAddEvent implements MCLilyPadServerAddEvent {
 
 	private final ServerAddEvent _event;
 
-	public CommonLilyPadServerAddEvent(ServerAddEvent event) {
+	public CommonMCLilyPadServerAddEvent(ServerAddEvent event) {
 		_event = event;
 	}
 
-	public CommonLilyPadServerAddEvent(Object object) {
+	public CommonMCLilyPadServerAddEvent(Object object) {
 		this((ServerAddEvent) object);
 	}
 

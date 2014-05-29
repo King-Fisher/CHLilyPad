@@ -5,7 +5,7 @@ import java.net.InetSocketAddress;
 
 /**
  *
- * @author Hector
+ * @author KingFisher
  */
 public interface MCLilyPadServerAddEvent extends BindableEvent {
 

@@ -10,15 +10,15 @@ import lilypad.client.connect.api.event.ServerRemoveEvent;
  * @author KingFisher
  */
 @abstraction(type = Type.BUKKIT)
-public class CommonLilyPadServerRemoveEvent implements MCLilyPadServerRemoveEvent {
+public class CommonMCLilyPadServerRemoveEvent implements MCLilyPadServerRemoveEvent {
 
 	private final ServerRemoveEvent _event;
 
-	public CommonLilyPadServerRemoveEvent(ServerRemoveEvent event) {
+	public CommonMCLilyPadServerRemoveEvent(ServerRemoveEvent event) {
 		_event = event;
 	}
 
-	public CommonLilyPadServerRemoveEvent(Object object) {
+	public CommonMCLilyPadServerRemoveEvent(Object object) {
 		this((ServerRemoveEvent) object);
 	}
 

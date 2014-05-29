@@ -10,15 +10,15 @@ import lilypad.client.connect.api.event.RedirectEvent;
  * @author KingFisher
  */
 @abstraction(type = Type.BUKKIT)
-public class CommonLilyPadRedirectEvent implements MCLilyPadRedirectEvent {
+public class CommonMCLilyPadRedirectEvent implements MCLilyPadRedirectEvent {
 
 	private final RedirectEvent _event;
 
-	public CommonLilyPadRedirectEvent(RedirectEvent event) {
+	public CommonMCLilyPadRedirectEvent(RedirectEvent event) {
 		_event = event;
 	}
 
-	public CommonLilyPadRedirectEvent(Object object) {
+	public CommonMCLilyPadRedirectEvent(Object object) {
 		this((RedirectEvent) object);
 	}
 

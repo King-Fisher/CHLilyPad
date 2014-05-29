@@ -16,21 +16,21 @@ public class CommonLilyPadListener {
 
 	@EventListener
 	public void onMessage(MessageEvent event) {
-		EventUtils.TriggerListener(Driver.EXTENSION, "lp_message_received", new CommonLilyPadMessageEvent(event));
+		EventUtils.TriggerListener(Driver.EXTENSION, "lp_message_received", new CommonMCLilyPadMessageEvent(event));
 	}
 
 	@EventListener
 	public void onPlayerRedirection(RedirectEvent event) {
-		EventUtils.TriggerListener(Driver.EXTENSION, "lp_player_redirected", new CommonLilyPadRedirectEvent(event));
+		EventUtils.TriggerListener(Driver.EXTENSION, "lp_player_redirected", new CommonMCLilyPadRedirectEvent(event));
 	}
 
 	@EventListener
 	public void onServerAdded(ServerAddEvent event) {
-		EventUtils.TriggerListener(Driver.EXTENSION, "lp_server_added", new CommonLilyPadServerAddEvent(event));
+		EventUtils.TriggerListener(Driver.EXTENSION, "lp_server_added", new CommonMCLilyPadServerAddEvent(event));
 	}
 
 	@EventListener
 	public void onServerRemoved(ServerRemoveEvent event) {
-		EventUtils.TriggerListener(Driver.EXTENSION, "lp_server_removed", new CommonLilyPadServerRemoveEvent(event));
+		EventUtils.TriggerListener(Driver.EXTENSION, "lp_server_removed", new CommonMCLilyPadServerRemoveEvent(event));
 	}
 }

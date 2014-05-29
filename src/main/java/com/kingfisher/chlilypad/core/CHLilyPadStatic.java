@@ -8,7 +8,7 @@ import lilypad.client.connect.api.Connect;
 
 /**
  *
- * @author Hector
+ * @author KingFisher
  */
 public final class CHLilyPadStatic {
 

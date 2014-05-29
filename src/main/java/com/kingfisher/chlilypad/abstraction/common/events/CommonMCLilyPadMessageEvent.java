@@ -10,15 +10,15 @@ import lilypad.client.connect.api.event.MessageEvent;
  * @author KingFisher
  */
 @abstraction(type = Type.BUKKIT)
-public class CommonLilyPadMessageEvent implements MCLilyPadMessageEvent {
+public class CommonMCLilyPadMessageEvent implements MCLilyPadMessageEvent {
 
 	private final MessageEvent _event;
 
-	public CommonLilyPadMessageEvent(MessageEvent event) {
+	public CommonMCLilyPadMessageEvent(MessageEvent event) {
 		_event = event;
 	}
 
-	public CommonLilyPadMessageEvent(Object object) {
+	public CommonMCLilyPadMessageEvent(Object object) {
 		this((MessageEvent) object);
 	}
 

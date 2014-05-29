@@ -4,7 +4,7 @@ import com.laytonsmith.core.events.BindableEvent;
 
 /**
  *
- * @author Hector
+ * @author KingFisher
  */
 public interface MCLilyPadServerRemoveEvent extends BindableEvent {
 
