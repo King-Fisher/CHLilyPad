@@ -38,16 +38,11 @@ import lilypad.client.connect.api.request.impl.MessageRequest;
 import lilypad.client.connect.api.request.impl.NotifyPlayerRequest;
 import lilypad.client.connect.api.request.impl.RedirectRequest;
 import lilypad.client.connect.api.result.StatusCode;
-import lilypad.client.connect.api.result.impl.AsProxyResult;
 import lilypad.client.connect.api.result.impl.AsServerResult;
-import lilypad.client.connect.api.result.impl.AuthenticateResult;
 import lilypad.client.connect.api.result.impl.GetDetailsResult;
 import lilypad.client.connect.api.result.impl.GetKeyResult;
 import lilypad.client.connect.api.result.impl.GetPlayersResult;
 import lilypad.client.connect.api.result.impl.GetWhoamiResult;
-import lilypad.client.connect.api.result.impl.MessageResult;
-import lilypad.client.connect.api.result.impl.NotifyPlayerResult;
-import lilypad.client.connect.api.result.impl.RedirectResult;
 
 /**
  *
@@ -270,10 +265,7 @@ public final class LilyPadFunctions {
 		@Override
 		public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
 			try {
-				AsProxyResult result = CHLilyPadStatic.getConnect(t).request((args.length == 4) ? new AsProxyRequest(ArgumentValidation.getInt32(args[0], t), args[1].val(), args[2].val(), ArgumentValidation.getInt32(args[3], t)) : new AsProxyRequest(args[0].val(), ArgumentValidation.getInt32(args[1], t), args[2].val(), args[3].val(), ArgumentValidation.getInt32(args[4], t))).awaitUninterruptibly();
-				CArray r = new CArray(t);
-				r.set("status", result.getStatusCode().name());
-				return r;
+				return CHLilyPadStatic.evaluate(CHLilyPadStatic.getConnect(t).request((args.length == 4) ? new AsProxyRequest(ArgumentValidation.getInt32(args[0], t), args[1].val(), args[2].val(), ArgumentValidation.getInt32(args[3], t)) : new AsProxyRequest(args[0].val(), ArgumentValidation.getInt32(args[1], t), args[2].val(), args[3].val(), ArgumentValidation.getInt32(args[4], t))).awaitUninterruptibly(), t);
 			} catch (RequestException ex) {
 				throw new ConfigRuntimeException(ex.getMessage(), Exceptions.ExceptionType.PluginInternalException, t);
 			}
@@ -303,8 +295,7 @@ public final class LilyPadFunctions {
 		public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
 			try {
 				AsServerResult result = CHLilyPadStatic.getConnect(t).request((args.length == 1) ? new AsServerRequest(ArgumentValidation.getInt32(args[0], t)) : new AsServerRequest(args[0].val(), ArgumentValidation.getInt32(args[1], t))).awaitUninterruptibly();
-				CArray r = new CArray(t);
-				r.set("status", result.getStatusCode().name());
+				CArray r = CHLilyPadStatic.evaluate(result, t);
 				r.set("key", result.getSecurityKey());
 				return r;
 			} catch (RequestException ex) {
@@ -346,10 +337,7 @@ public final class LilyPadFunctions {
 				key = args[2].val();
 			}
 			try {
-				AuthenticateResult result = CHLilyPadStatic.getConnect(t).request(new AuthenticateRequest(username, password, key)).awaitUninterruptibly();
-				CArray r = new CArray(t);
-				r.set("status", result.getStatusCode().name());
-				return r;
+				return CHLilyPadStatic.evaluate(CHLilyPadStatic.getConnect(t).request(new AuthenticateRequest(username, password, key)).awaitUninterruptibly(), t);
 			} catch (RequestException ex) {
 				throw new ConfigRuntimeException(ex.getMessage(), Exceptions.ExceptionType.PluginInternalException, t);
 			}
@@ -373,8 +361,7 @@ public final class LilyPadFunctions {
 		public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
 			try {
 				GetDetailsResult result = CHLilyPadStatic.getConnect(t).request(new GetDetailsRequest()).awaitUninterruptibly();
-				CArray r = new CArray(t);
-				r.set("status", result.getStatusCode().name());
+				CArray r = CHLilyPadStatic.evaluate(result, t);
 				r.set("ip", result.getIp());
 				r.set("motd", result.getMotd());
 				r.set("port", new CInt(result.getPort(), t), t);
@@ -403,8 +390,7 @@ public final class LilyPadFunctions {
 		public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
 			try {
 				GetKeyResult result = CHLilyPadStatic.getConnect(t).request(new GetKeyRequest()).awaitUninterruptibly();
-				CArray r = new CArray(t);
-				r.set("status", result.getStatusCode().name());
+				CArray r = CHLilyPadStatic.evaluate(result, t);
 				r.set("key", result.getKey());
 				return r;
 			} catch (RequestException ex) {
@@ -457,10 +443,7 @@ public final class LilyPadFunctions {
 				message = args[2] instanceof CByteArray ? ((CByteArray) args[2]).asByteArrayCopy() : args[2].val().getBytes();
 			}
 			try {
-				MessageResult result = CHLilyPadStatic.getConnect(t).request(new MessageRequest(recipients, channel, message)).awaitUninterruptibly();
-				CArray r = new CArray(t);
-				r.set("status", result.getStatusCode().name());
-				return r;
+				return CHLilyPadStatic.evaluate(CHLilyPadStatic.getConnect(t).request(new MessageRequest(recipients, channel, message)).awaitUninterruptibly(), t);
 			} catch (RequestException ex) {
 				throw new ConfigRuntimeException(ex.getMessage(), Exceptions.ExceptionType.PluginInternalException, t);
 			}
@@ -496,10 +479,7 @@ public final class LilyPadFunctions {
 				name = args[0].val();
 			}
 			try {
-				NotifyPlayerResult result = CHLilyPadStatic.getConnect(t).request(new NotifyPlayerRequest(true, name)).awaitUninterruptibly();
-				CArray r = new CArray(t);
-				r.set("status", result.getStatusCode().name());
-				return r;
+				return CHLilyPadStatic.evaluate(CHLilyPadStatic.getConnect(t).request(new NotifyPlayerRequest(true, name)).awaitUninterruptibly(), t);
 			} catch (RequestException ex) {
 				throw new ConfigRuntimeException(ex.getMessage(), Exceptions.ExceptionType.PluginInternalException, t);
 			}
@@ -535,10 +515,7 @@ public final class LilyPadFunctions {
 				name = args[0].val();
 			}
 			try {
-				NotifyPlayerResult result = CHLilyPadStatic.getConnect(t).request(new NotifyPlayerRequest(false, name)).awaitUninterruptibly();
-				CArray r = new CArray(t);
-				r.set("status", result.getStatusCode().name());
-				return r;
+				return CHLilyPadStatic.evaluate(CHLilyPadStatic.getConnect(t).request(new NotifyPlayerRequest(false, name)).awaitUninterruptibly(), t);
 			} catch (RequestException ex) {
 				throw new ConfigRuntimeException(ex.getMessage(), Exceptions.ExceptionType.PluginInternalException, t);
 			}
@@ -568,8 +545,7 @@ public final class LilyPadFunctions {
 		public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
 			try {
 				GetPlayersResult result = CHLilyPadStatic.getConnect(t).request(new GetPlayersRequest((args.length == 0) ? true : ArgumentValidation.getBoolean(args[0], t))).awaitUninterruptibly();
-				CArray r = new CArray(t);
-				r.set("status", result.getStatusCode().name());
+				CArray r = CHLilyPadStatic.evaluate(result, t);
 				r.set("current", new CInt(result.getCurrentPlayers(), t), t);
 				r.set("max", new CInt(result.getMaximumPlayers(), t), t);
 				CArray players = new CArray(t);
@@ -615,10 +591,7 @@ public final class LilyPadFunctions {
 				server = args[1].val();
 			}
 			try {
-				RedirectResult result = CHLilyPadStatic.getConnect(t).request(new RedirectRequest(server, player)).awaitUninterruptibly();
-				CArray r = new CArray(t);
-				r.set("status", result.getStatusCode().name());
-				return r;
+				return CHLilyPadStatic.evaluate(CHLilyPadStatic.getConnect(t).request(new RedirectRequest(server, player)).awaitUninterruptibly(), t);
 			} catch (RequestException ex) {
 				throw new ConfigRuntimeException(ex.getMessage(), Exceptions.ExceptionType.PluginInternalException, t);
 			}
@@ -642,7 +615,7 @@ public final class LilyPadFunctions {
 		public Construct exec(Target t, Environment environment, Construct... args) throws ConfigRuntimeException {
 			try {
 				GetWhoamiResult result = CHLilyPadStatic.getConnect(t).request(new GetWhoamiRequest()).awaitUninterruptibly();
-				CArray r = new CArray(t);
+				CArray r = CHLilyPadStatic.evaluate(result, t);
 				r.set("status", result.getStatusCode().name());
 				r.set("identification", result.getIdentification());
 				return r;
