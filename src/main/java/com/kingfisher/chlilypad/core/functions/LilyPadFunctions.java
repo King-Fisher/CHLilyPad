@@ -443,7 +443,11 @@ public final class LilyPadFunctions {
 				message = args[2] instanceof CByteArray ? ((CByteArray) args[2]).asByteArrayCopy() : args[2].val().getBytes();
 			}
 			try {
-				return CHLilyPadStatic.evaluate(CHLilyPadStatic.getConnect(t).request(new MessageRequest(recipients, channel, message)).awaitUninterruptibly(), t);
+				if (recipients == null) {
+					return CHLilyPadStatic.evaluate(CHLilyPadStatic.getConnect(t).request(new MessageRequest((String) null, channel, message)).awaitUninterruptibly(), t);
+				} else {
+					return CHLilyPadStatic.evaluate(CHLilyPadStatic.getConnect(t).request(new MessageRequest(recipients, channel, message)).awaitUninterruptibly(), t);
+				}
 			} catch (RequestException ex) {
 				throw new ConfigRuntimeException(ex.getMessage(), Exceptions.ExceptionType.PluginInternalException, t);
 			}
