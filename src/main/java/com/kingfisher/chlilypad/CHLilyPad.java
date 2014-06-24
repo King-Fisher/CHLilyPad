@@ -15,7 +15,7 @@ import lilypad.client.connect.api.Connect;
 @MSExtension("CHLilyPad")
 public final class CHLilyPad extends AbstractExtension {
 
-	private static final Version VERSION = new SimpleVersion(1, 0, 0);
+	private static final Version VERSION = new SimpleVersion(1, 0, 2);
 
 	private static Connect _connect;
 

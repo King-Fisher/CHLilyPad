@@ -415,7 +415,8 @@ public final class LilyPadFunctions {
 		@Override
 		public String docs() {
 			return "array {[recipients], channel, message} Sends a message to the specified recipients. recipients can be null, a string or an array of string,"
-				+ " if null or not specified, all the servers will receive the message. message can be a string or a byte array. This functions is a request.";
+				+ " if null or not specified, all the servers will receive the message. message can be a string or a byte array. This functions is a request."
+				+ " If the sum of the message length, channel name length and recipients name length is too big, a PluginInternalException is thrown.";
 		}
 
 		@Override
@@ -444,9 +445,21 @@ public final class LilyPadFunctions {
 			}
 			try {
 				if (recipients == null) {
-					return CHLilyPadStatic.evaluate(CHLilyPadStatic.getConnect(t).request(new MessageRequest((String) null, channel, message)).awaitUninterruptibly(), t);
+					if ((channel.length() + message.length) < 65531) {
+						return CHLilyPadStatic.evaluate(CHLilyPadStatic.getConnect(t).request(new MessageRequest((String) null, channel, message)).awaitUninterruptibly(), t);
+					} else {
+						throw new ConfigRuntimeException("Packet too big.", Exceptions.ExceptionType.PluginInternalException, t);
+					}
 				} else {
-					return CHLilyPadStatic.evaluate(CHLilyPadStatic.getConnect(t).request(new MessageRequest(recipients, channel, message)).awaitUninterruptibly(), t);
+					int size = channel.length() + message.length + recipients.size();
+					for (String recipient : recipients) {
+						size += recipient.length();
+					}
+					if (size < 65531) {
+						return CHLilyPadStatic.evaluate(CHLilyPadStatic.getConnect(t).request(new MessageRequest(recipients, channel, message)).awaitUninterruptibly(), t);
+					} else {
+						throw new ConfigRuntimeException("Packet too big.", Exceptions.ExceptionType.PluginInternalException, t);
+					}
 				}
 			} catch (RequestException ex) {
 				throw new ConfigRuntimeException(ex.getMessage(), Exceptions.ExceptionType.PluginInternalException, t);
